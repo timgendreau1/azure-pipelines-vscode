@@ -1,42 +1,130 @@
 {
-    "name": "yaml-rocket-ship",
-    "displayName": "YAML Rocket Ship",
-    "description": "TODO description",
-    "version": "0.0.1",
-    "publisher": "nc-rocket",
-    "repository": "https://github.com/Microsoft/pipelines-vscode",
-    "icon": "assets/ymlfile.png",
-    "engines": {
-        "vscode": "^1.25.0"
-    },
-    "categories": [
-        "Other"
+  "name": "yaml-rocket-ship",
+  "displayName": "YAML Rocket Ship",
+  "description": "TODO description",
+  "version": "0.0.1",
+  "publisher": "nc-rocket",
+  "license": "MIT",
+  "preview": true,
+  "bugs": "https://github.com/redhat-developer/vscode-yaml/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redhat-developer/vscode-yaml"
+  },
+  "icon": "icon/icon128.png",
+  "engines": {
+    "vscode": "^1.22.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Linters",
+    "Snippets",
+    "Formatters"
+  ],
+  "activationEvents": [
+    "onLanguage:yaml"
+  ],
+  "keywords": [
+    "kubernetes",
+    "kedge",
+    "yaml",
+    "autocompletion",
+    "validation"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "languages": [
+      {
+        "id": "yaml",
+        "aliases": [
+          "YAML",
+          "yaml"
+        ],
+        "extensions": [
+          ".yml",
+          ".eyaml",
+          ".eyml",
+          ".yaml"
+        ],
+        "filenames": [],
+        "firstLine": "^#cloud-config",
+        "configuration": "./language-configuration.json"
+      }
     ],
-    "activationEvents": [
-        "onCommand:extension.sayHello",
-        "onLanguage:yaml"
+    "grammars": [
+      {
+        "language": "yaml",
+        "scopeName": "source.yaml",
+        "path": "./syntaxes/yaml.tmLanguage.json"
+      }
     ],
-    "main": "./out/extension",
-    "contributes": {
-        "commands": [
-            {
-                "command": "extension.sayHello",
-                "title": "Hello World"
-            }
-        ]
+    "yamlValidation": [],
+    "configuration": {
+      "properties": {
+        "yaml.trace.server": {
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VSCode and the languageServerExample service."
+        },
+        "yaml.schemas": {
+          "type": "object",
+          "default": {},
+          "description": "Associate schemas to Yaml files in the current workspace"
+        },
+        "yaml.format.enable": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable/disable default YAML formatter (requires restart)"
+        },
+        "yaml.validate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable validation feature"
+        },
+        "yaml.customTags": {
+          "type": "array",
+          "default": [],
+          "description": "Custom tags for the parser to use"
+        }
+      }
     },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
-        "tslint": "^5.8.0",
-        "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+    "configurationDefaults": {
+      "[yaml]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.quickSuggestions": {
+          "other": true,
+          "comments": false,
+          "strings": true
+        },
+        "editor.autoIndent": false
+      }
     }
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "update-vscode": "node ./node_modules/vscode/bin/install",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "mocha --ui tdd out/test/extension.test.js",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.33",
+    "@types/node": "^6.0.52",
+    "ts-node": "^3.3.0",
+    "typescript": "3.0.0-dev.20180626",
+    "vscode": "^1.1.17"
+  },
+  "dependencies": {
+    "vscode-languageclient": "3.5.1",
+    "vscode-nls": "^3.2.1",
+    "vscode-uri": "^1.0.3",
+    "yaml-language-server": "0.0.17"
+  }
 }
