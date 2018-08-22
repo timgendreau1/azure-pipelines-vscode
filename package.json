@@ -1,27 +1,16 @@
 {
-    "name": "azure-pipelines",
-    "displayName": "Azure Pipelines",
-    "description": "Syntax highlighting, Intellisense, and more for Azure Pipelines",
+    "name": "yaml-rocket-ship-2",
+    "displayName": "YAML Rocket Ship",
+    "description": "TODO description",
     "version": "1.139.0",
-    "publisher": "ms-azure-devops",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Microsoft/pipelines-vscode"
-    },
-    "homepage": "https://github.com/Microsoft/pipelines-vscode/blob/master/README.md",
-    "bugs": "https://github.com/Microsoft/pipelines-vscode/issues/",
-    "license": "MIT",
-    "icon": "assets/pipelines.png",
-    "galleryBanner": {
-        "color": "#2C65E1",
-        "theme": "dark"
-    },
+    "publisher": "nc-rocket",
+    "repository": "https://github.com/Microsoft/pipelines-vscode",
+    "icon": "assets/ymlfile.png",
     "engines": {
         "vscode": "^1.25.0"
     },
     "categories": [
-        "Programming Languages",
-        "Formatters"
+        "Other"
     ],
     "activationEvents": [
         "onLanguage:azure-pipelines"
@@ -33,10 +22,7 @@
                 "id": "azure-pipelines",
                 "configuration": "./language-configuration.json",
                 "filenamePatterns": [
-                    "azure-pipelines.yml",
-                    "azure-pipelines.yaml",
-                    ".vsts-ci.yml",
-                    "vsts-ci.yml"
+                    ".vsts-ci.yml"
                 ],
                 "aliases": [
                     "Azure Pipelines"
@@ -50,12 +36,20 @@
                 "path": "./syntaxes/yaml.tmLanguage.json"
             }
         ],
-        "yamlValidation": [
-            {
-                "fileMatch": "*.yml",
-                "url": "./local-schema.json"
+        "configuration": {
+            "title": "Azure Pipelines extension configuration.",
+            "properties": {
+                "yaml.validate": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable/disable validation feature"
+                },
+                "azure-pipelines.account": {
+                    "type": "string",
+                    "description": "Your Azure Pipelines account name"
+                }
             }
-        ],
+        },
         "configurationDefaults": {
             "[azure-pipelines]": {
                 "gitlens.codeLens.scopesByLanguage": [
@@ -65,17 +59,33 @@
                             "document"
                         ]
                     }
-                ],
-                "editor.insertSpaces": true,
-                "editor.tabSize": 2,
-                "editor.quickSuggestions": {
-                    "other": true,
-                    "comments": false,
-                    "strings": true
-                },
-                "editor.autoIndent": false
+                ]
             }
-        }
+        },
+        "snippets": [
+            {
+                "language": "azure-pipelines",
+                "path": "./snippets/ci-snippets.json"
+            }
+        ],
+        "commands": [
+            {
+                "command": "azure-pipelines.DisplayCurrentSchemaFile",
+                "title": "Azure Pipelines: Display Current Schema File"
+            },
+            {
+                "command": "azure-pipelines.LoadLatestTaskSchema",
+                "title": "Azure Pipelines: Load Latest Task Schema"
+            },
+            {
+                "command": "azure-pipelines.Signin",
+                "title": "Azure Pipelines: Signin"
+            },
+            {
+                "command": "azure-pipelines.Signout",
+                "title": "Azure Pipelines: Signout"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
@@ -83,20 +93,30 @@
         "watch": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "npm run compile && node ./node_modules/vscode/bin/test",
-        "refreshVSToken": "vsts-npm-auth -config .npmrc"
+        "unittest": "node_modules/.bin/mocha -u tdd out/test/*.js",
+        "removeschemastore": "node remove-schema-store-settings.js",
+        "generateyamlschema": "npm run compile && node ./out/buildtools/generate-yaml-from-json.js"
     },
     "devDependencies": {
+        "assert": "1.4.1",
         "typescript": "2.6.1",
+        "mocha": "5.2.0",
         "vscode": "1.1.18",
         "tslint": "5.8.0",
         "ts-node": "3.3.0",
         "@types/node": "7.0.43",
-        "@types/mocha": "2.2.42"
+        "@types/mocha": "5.2.5",
+        "@types/q": "1.5.0",
+        "@types/underscore": "1.8.9"
     },
     "dependencies": {
+        "keytar": "4.2.1",
+        "q": "1.5.1",
+        "typed-rest-client": "1.0.7",
+        "underscore": "1.9.1",
         "vscode-languageclient": "4.4.0",
         "vscode-nls": "3.2.4",
         "vscode-uri": "1.0.5",
-        "pipelines-language-server": "0.1.0"
+        "yaml-language-server": "0.0.17"
     }
 }
